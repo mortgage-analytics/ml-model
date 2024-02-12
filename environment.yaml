@@ -9,10 +9,12 @@ dependencies:
   - ca-certificates=2023.12.12=h06a4308_0
   - cffi=1.16.0=py310h5eee18b_0
   - cfgv=3.4.0=py310h06a4308_0
+  - click=8.1.7=py310h06a4308_0
   - distlib=0.3.6=py310h06a4308_0
   - exceptiongroup=1.2.0=py310h06a4308_0
   - fastapi=0.103.0=py310h06a4308_0
   - filelock=3.13.1=py310h06a4308_0
+  - h11=0.14.0=py310h06a4308_0
   - identify=2.5.5=py310h06a4308_0
   - idna=3.4=py310h06a4308_0
   - ld_impl_linux-64=2.38=h1181459_1
@@ -45,6 +47,7 @@ dependencies:
   - typing_extensions=4.9.0=py310h06a4308_1
   - tzdata=2023d=h04d1e81_0
   - ukkonen=1.0.1=py310hdb19cb5_0
+  - uvicorn=0.20.0=py310h06a4308_0
   - virtualenv=20.17.1=py310h06a4308_0
   - wheel=0.41.2=py310h06a4308_0
   - xz=5.4.5=h5eee18b_0
