@@ -17,7 +17,7 @@ conda deactivate
 # Update env with packages from environment.yml
 conda install --file environment.yml
 
-# After installing a new package, update environment.yml, so that we all have the same packages.
+# If you install a new package, update environment.yml, so that we all have the same packages.
 conda install <package_name>
 conda env export > environment.yml
 ```
