@@ -30,6 +30,12 @@ In order to start up, run:
 uvicorn main:app --reload
 ```
 
-**Note**: make sure you have setup conda with the correct packages from environment.yml.
+**Note**: make sure you have setup conda by install the packages from environment.yml.
 
 We'll also be using mypy for type checking. This isn't strictly necessary, but I thought I would add it since weird errors can occur without type checking. We can get rid of this at any point in time, and CPython will still run our code even if mypy finds type errors.
+
+If you want to set this up, call:
+
+``` sh
+pre-commit install
+```
