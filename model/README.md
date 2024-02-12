@@ -15,7 +15,7 @@ conda activate model
 conda deactivate
 
 # Update env with packages from environment.yml
-conda install --file environment.yml
+conda env update --file environment.yml --prune
 
 # If you install a new package, update environment.yml, so that we all have the same packages.
 conda install <package_name>
