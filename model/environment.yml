@@ -48,6 +48,8 @@ dependencies:
   - libxml2=2.10.4=hf1b16e4_1
   - lz4-c=1.9.4=h6a678d5_0
   - menuinst=2.0.1=py311h06a4308_1
+  - mypy=1.5.1=py311h06a4308_0
+  - mypy_extensions=1.0.0=py311h06a4308_0
   - ncurses=6.4=h6a678d5_0
   - openssl=3.0.13=h7f8727e_0
   - packaging=23.1=py311h06a4308_0
@@ -55,6 +57,7 @@ dependencies:
   - pip=23.3.1=py311h06a4308_0
   - platformdirs=3.10.0=py311h06a4308_0
   - pluggy=1.0.0=py311h06a4308_1
+  - psutil=5.9.0=py311h5eee18b_0
   - pybind11-abi=4=hd3eb1b0_1
   - pycosat=0.6.6=py311h5eee18b_0
   - pycparser=2.21=pyhd3eb1b0_0
