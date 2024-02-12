@@ -21,3 +21,14 @@ conda install --file environment.yml
 conda install <package_name>
 conda env export > environment.yml
 ```
+
+We'll be using FastAPI to host our model. You can send HTTP requests to it.
+
+In order to start up, run:
+
+``` sh
+uvicorn main:app --reload
+```
+
+**Note**: make sure you have setup conda in order to run this.
+
