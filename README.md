@@ -19,7 +19,7 @@ conda env update --file environment.yaml --prune
 
 # If you install a new package, update environment.yaml, so that we all have the same packages.
 conda install <package_name>
-conda env export --no-builds > environment.yaml
+conda env export --from-history > environment.yaml
 ```
 
 We'll be using FastAPI to host our model. You can send HTTP requests to it.
