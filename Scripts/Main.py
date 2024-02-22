@@ -2,7 +2,7 @@ import pandas as pd
 from Timeline import Timeline
 from Client import Client
 
-file_path = r"C:\Users\rober\OneDrive\Documents\College\SWENG\Loading_Data\Copy of combined_report-1707267132094.xlsx - Application Data (Import).csv"
+file_path = r"C:\Users\manue\Downloads\Copy of combined_report-1707267132094.xlsx"
 df = pd.read_csv(file_path)
 
 last_updated_date = df['Last Updated Date'].tolist()
