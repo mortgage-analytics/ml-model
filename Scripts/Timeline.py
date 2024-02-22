@@ -54,31 +54,52 @@ class Timeline:
     def calculate_differences(self):
         # Initialize lists to store the differences
         diffs = {
-            'lead_to_app': [],
-            'app_to_advisor': [],
-            'advisor_to_submission': [],
-            'submission_to_response': [],
-            'response_to_valuation': [],
-            'valuation_to_loan_offer': [],
-            'loan_offer_to_completed': []
+            'lead_to_app': self._num_of_days(self.lead_created_date, self.application_created_date),
+            'app_to_advisor': self._num_of_days(self.application_created_date,self.advisor_review_completion_date),
+            'advisor_to_submission': self._num_of_days(self.advisor_review_completion_date,self.submission_date),
+            'submission_to_response': self._num_of_days(self.submission_date,self.response_date),
+            'response_to_valuation': self._num_of_days(self.response_date, self.valuation_received),
+            'valuation_to_loan_offer': self._num_of_days(self.valuation_received,self.loan_offer_received),
+            'loan_offer_to_completed': self._num_of_days(self.loan_offer_received,self.completed_date)
         }
 
-        # Iterate through the date arrays and calculate differences
-        for i in range(len(self.lead_created_date)):
-            if i < len(self.application_created_date):
-                diffs['lead_to_app'].append(self._num_of_days(self.lead_created_date[i], self.application_created_date[i]))
-            if i < len(self.advisor_review_completion_date):
-                diffs['app_to_advisor'].append(self._num_of_days(self.application_created_date[i], self.advisor_review_completion_date[i]))
-            if i < len(self.submission_date):
-                diffs['advisor_to_submission'].append(self._num_of_days(self.advisor_review_completion_date[i], self.submission_date[i]))
-            if i < len(self.response_date):
-                diffs['submission_to_response'].append(self._num_of_days(self.submission_date[i], self.response_date[i]))
-            if i < len(self.valuation_received):
-                diffs['response_to_valuation'].append(self._num_of_days(self.response_date[i], self.valuation_received[i]))
-            if i < len(self.loan_offer_received):
-                diffs['valuation_to_loan_offer'].append(self._num_of_days(self.valuation_received[i], self.loan_offer_received[i]))
-            if i < len(self.completed_date):
-                diffs['loan_offer_to_completed'].append(self._num_of_days(self.loan_offer_received[i], self.completed_date[i]))
 
+
+        # Iterate through the date arrays and calculate differences
+        # for i in range(len(self.lead_created_date)):
+        #     if i < len(self.application_created_date):
+        #         diffs['lead_to_app'].append(self._num_of_days(self.lead_created_date[i], self.application_created_date[i]))
+        #     if i < len(self.advisor_review_completion_date):
+        #         diffs['app_to_advisor'].append(self._num_of_days(self.application_created_date[i], self.advisor_review_completion_date[i]))
+        #     if i < len(self.submission_date):
+        #         diffs['advisor_to_submission'].append(self._num_of_days(self.advisor_review_completion_date[i], self.submission_date[i]))
+        #     if i < len(self.response_date):
+        #         diffs['submission_to_response'].append(self._num_of_days(self.submission_date[i], self.response_date[i]))
+        #     if i < len(self.valuation_received):
+        #         diffs['response_to_valuation'].append(self._num_of_days(self.response_date[i], self.valuation_received[i]))
+        #     if i < len(self.loan_offer_received):
+        #         diffs['valuation_to_loan_offer'].append(self._num_of_days(self.valuation_received[i], self.loan_offer_received[i]))
+        #     if i < len(self.completed_date):
+        #         diffs['loan_offer_to_completed'].append(self._num_of_days(self.loan_offer_received[i], self.completed_date[i]))
+        #
         return diffs
+
+    def getStage(self, applications, stageName):
+        stageArray = []
+        noneCount=0
+        for application in applications:
+            if application[stageName] is not None:
+                stageArray.append(application[stageName])
+            else:
+                noneCount += 1
+        population = 1 - (noneCount/ (len(stageArray)+noneCount))
+        return stageArray, population
+
+    def stageAverageAndSD(self, applications, stage):
+        stageArray, population = self.getStage(applications, stage)
+        return np.mean(stageArray),np.std(stageArray),population
+
+    def rankForEachStage(self, applications, stage):
+        stageArray, population = self.getStage(applications, stage)
+        return sorted(stageArray), population
 
