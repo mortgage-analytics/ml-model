@@ -1,4 +1,5 @@
 from datetime import datetime
+import numpy as np
 
 class Timeline:
     def __init__(self, lead_created_date, application_created_date, advisor_review_completion_date,
@@ -12,6 +13,29 @@ class Timeline:
         self.valuation_received = valuation_received
         self.loan_offer_received = loan_offer_received
         self.completed_date = completed_date
+
+    def calculate_stats(self, diffs):
+        stats = {}
+        for key, value_list in diffs.items():
+            filtered_values = []
+            for value in value_list:
+                if value is not None and value >= 0:
+                    filtered_values.append(value)
+
+            if len(filtered_values)>0:
+                average = np.mean(filtered_values)
+                std_dev = np.std(filtered_values)
+            else:
+                average = None
+                std_dev = None
+
+            stats[key] = {
+                'average': average,
+                'standard_deviation': std_dev
+            }
+        return stats
+
+
 
     def _num_of_days(self, date1, date2):
         date_format = "%d-%m-%Y"  # Adjust the format as per your data
@@ -57,3 +81,4 @@ class Timeline:
                 diffs['loan_offer_to_completed'].append(self._num_of_days(self.loan_offer_received[i], self.completed_date[i]))
 
         return diffs
+

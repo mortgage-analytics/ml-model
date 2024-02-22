@@ -2,7 +2,7 @@ import pandas as pd
 from Timeline import Timeline
 from Client import Client
 
-file_path = r"C:\Users\rober\OneDrive\Documents\College\SWENG\Loading_Data\Copy of combined_report-1707267132094.xlsx - Application Data (Import).csv"  # Update with your CSV file path
+file_path = r"C:\Users\rober\OneDrive\Documents\College\SWENG\Loading_Data\Copy of combined_report-1707267132094.xlsx - Application Data (Import).csv"
 df = pd.read_csv(file_path)
 
 last_updated_date = df['Last Updated Date'].tolist()
@@ -38,3 +38,10 @@ clients.display_info()
 
 for key, value in diffs.items():
     print(f"{key}: {value}")
+
+
+stats = timeline.calculate_stats(diffs)
+
+
+for stage, stat in stats.items():
+    print(f"{stage}: Average = {stat['average']}, Standard Deviation = {stat['standard_deviation']}")
