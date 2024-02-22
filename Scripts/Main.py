@@ -1,6 +1,8 @@
 import pandas as pd
+from Timeline import Timeline
+from Client import Client
 
-file_path = r'C:\Users\rober\OneDrive\Documents\College\SWENG\Loading_Data\Copy of combined_report-1707267132094.xlsx - Application Data (Import).csv'
+file_path = r"C:\Users\rober\OneDrive\Documents\College\SWENG\Loading_Data\Copy of combined_report-1707267132094.xlsx - Application Data (Import).csv"  # Update with your CSV file path
 df = pd.read_csv(file_path)
 
 last_updated_date = df['Last Updated Date'].tolist()
@@ -23,3 +25,16 @@ lead_source = df['Lead Source'].tolist()
 assigned_to = df['Assigned To'].tolist()
 single_joint = df['Single/Joint'].tolist()
 
+
+timeline = Timeline(lead_created_date, application_created_date,
+                 advisor_review_completion_date, submission_date, response_date, valuation_received,
+                 loan_offer_received, completed_date)
+
+diffs = timeline.calculate_differences()
+
+clients = Client(type_, submitted_to, property_identified, mortgage_amount_proposed)
+
+clients.display_info()
+
+for key, value in diffs.items():
+    print(f"{key}: {value}")
