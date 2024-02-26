@@ -1,9 +1,10 @@
 from datetime import datetime
 import numpy as np
+# from Client import Client
 
 class Timeline:
     def __init__(self, lead_created_date, application_created_date, advisor_review_completion_date,
-                 submission_date, response_date, valuation_received, loan_offer_received, completed_date):
+                 submission_date, response_date, valuation_received, loan_offer_received, completed_date, customer):
         # These are expected to be lists of date strings
         self.lead_created_date = lead_created_date
         self.application_created_date = application_created_date
@@ -13,6 +14,7 @@ class Timeline:
         self.valuation_received = valuation_received
         self.loan_offer_received = loan_offer_received
         self.completed_date = completed_date
+        self.customer = customer
 
     def calculate_stats(self, diffs):
         stats = {}
@@ -84,7 +86,7 @@ class Timeline:
         #
         return diffs
 
-    def getStage(self, applications, stageName):
+    def getStage(applications, stageName):
         stageArray = []
         noneCount=0
         for application in applications:
@@ -95,11 +97,11 @@ class Timeline:
         population = 1 - (noneCount/ (len(stageArray)+noneCount))
         return stageArray, population
 
-    def stageAverageAndSD(self, applications, stage):
-        stageArray, population = self.getStage(applications, stage)
+    def stageAverageAndSD(applications, stage):
+        stageArray, population = getStage(applications, stage)
         return np.mean(stageArray),np.std(stageArray),population
 
-    def rankForEachStage(self, applications, stage):
-        stageArray, population = self.getStage(applications, stage)
+    def rankForEachStage(applications, stage):
+        stageArray, population = getStage(applications, stage)
         return sorted(stageArray), population
 

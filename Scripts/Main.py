@@ -1,6 +1,11 @@
 import pandas as pd
 from Timeline import Timeline
 from Client import Client
+import data_analytics
+
+stagesNames = ['lead_to_app', 'app_to_advisor', 'advisor_to_submission', 'submission_to_response', 'response_to_valuation',
+               'valuation_to_loan_offer', 'loan_offer_to_completed']
+
 
 if __name__ == "__main__":
     file_path = r"../data.csv"
@@ -27,82 +32,31 @@ if __name__ == "__main__":
     single_joint = df['Single/Joint'].tolist()
 
     applicationArray = []
+    diffsArray = []
+    clientsArray = []
     for i in range(0, len(response_date)):
+        client = Client(type_[i], submitted_to[i], property_identified[i], mortgage_amount_proposed[i],single_joint[i], None)
+        clientsArray.append(client)
         timeline = Timeline(lead_created_date[i], application_created_date[i],
                             advisor_review_completion_date[i], submission_date[i], response_date[i],
-                            valuation_received[i],
-                            loan_offer_received[i], completed_date[i])
+                            valuation_received[i], loan_offer_received[i], completed_date[i], client)
         applicationArray.append(timeline)
-        # print(timeline)
-
-    diffsArray = []
-    for application in applicationArray:
-        diffs = application.calculate_differences()
-        diffsArray.append(diffs)
-
-    clientsArray = []
-    for i in range(0, len(submitted_to)):
-        client = Client(type_[i], submitted_to[i], property_identified[i], mortgage_amount_proposed[i],single_joint[i])
-        clientsArray.append(client)
+        diffsArray.append(timeline.calculate_differences())
+        client.application = timeline
         client.display_info()
 
-    stage_name = 'lead_to_app'
-    average, standard_dev,population = applicationArray[0].stageAverageAndSD(diffsArray,stage_name)
-    print(f"Average for {stage_name}: {average}")
-    print(f"Standard deviation for {stage_name}: {standard_dev}")
+    for stageName in stagesNames:
+        average, standardDev, population = data_analytics.stageAverageAndSD(diffsArray,stageName) 
+        print(f"Average for {stageName}: {average}")
+        print(f"Standard deviation for {stageName}: {standardDev}")
+        print(f"This data was collected with {population}% of the available data") 
 
-    stage_name = 'app_to_advisor'
-    average, standard_dev,population = applicationArray[0].stageAverageAndSD(diffsArray, stage_name)
-    print(f"Average for {stage_name}: {average}")
-    print(f"Standard deviation for {stage_name}: {standard_dev}")
+    FTBCount, STBCount, SwitchingCount, EquityCount = data_analytics.WhatType(clientsArray)
 
-    stage_name = 'advisor_to_submission'
-    average, standard_dev, population = applicationArray[0].stageAverageAndSD(diffsArray, stage_name)
-    print(f"Average for {stage_name}: {average}")
-    print(f"Standard deviation for {stage_name}: {standard_dev}")
+    ICSCount,HavenCount,BOICount,OtherCount = data_analytics.WhatBank(clientsArray)
 
-    stage_name = 'submission_to_response'
-    average,standard_dev, population = applicationArray[0].stageAverageAndSD(diffsArray, stage_name)
-    print(f"Average for {stage_name}: {average}")
-    print(f"Standard deviation for {stage_name}: {standard_dev}")
-
-    stage_name = 'response_to_valuation'
-    average,standard_dev, population = applicationArray[0].stageAverageAndSD(diffsArray, stage_name)
-    print(f"Average for {stage_name}: {average}")
-    print(f"Standard deviation for {stage_name}: {standard_dev}")
-
-    stage_name = 'valuation_to_loan_offer'
-    average,standard_dev, population = applicationArray[0].stageAverageAndSD(diffsArray, stage_name)
-    print(f"Average for {stage_name}: {average}")
-    print(f"Standard deviation for {stage_name}: {standard_dev}")
-
-    stage_name = 'loan_offer_to_completed'
-    average,standard_dev, population = applicationArray[0].stageAverageAndSD(diffsArray, stage_name)
-    print(f"Average for {stage_name}: {average}")
-    print(f"Standard deviation for {stage_name}: {standard_dev}")
-
-    stage_name = 'loan_offer_to_completed'
-    average, population = applicationArray[0].rankForEachStage(diffsArray, stage_name)
-    print(f"Ranking for {stage_name}: {average}")
-
-    FTBCount, STBCount, SwitchingCount, EquityCount = clientsArray[0].WhatType(clientsArray)
-
-    ICSCount,HavenCount,BOICount,OtherCount = clientsArray[0].WhatBank(clientsArray)
-
-    singleCount,jointCount = clientsArray[0].SingleOrJoint(clientsArray)
+    singleCount,jointCount = data_analytics.SingleOrJoint(clientsArray)
 
     print(f"We have {singleCount} single clients and {jointCount} joint clients")
     print(f"We have {FTBCount} first time buyers, {STBCount} second time buyers, {SwitchingCount} switching customers and {EquityCount} equity customers")
-    print(f"We have {ICSCount} customers from ics,{HavenCount} customers from haven, {BOICount} customers from BOI and {OtherCount} from other banks")
-
-
-
-
-    # for key, value in diffs.items():
-    #     # print(f"{key}: {value}")
-    #
-    #     stats = timeline.calculate_stats(diffs)
-    #
-    #     for stage, stat in stats.items():
-    #         pass
-    #         # print(f"{stage}: Average = {stat['average']}, Standard Deviation = {stat['standard_deviation']}")
+    print(f"We have {ICSCount} customers from ICS,{HavenCount} customers from Haven, {BOICount} customers from BOI and {OtherCount} from other banks")
