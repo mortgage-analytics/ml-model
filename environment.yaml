@@ -2,6 +2,7 @@ name: model
 channels:
   - defaults
 dependencies:
+  - nomkl # reduces Docker image size by approx 700 MB
   - fastapi
   - mypy
   - pre-commit

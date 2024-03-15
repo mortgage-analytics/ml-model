@@ -1,6 +1,9 @@
+.git
 .dockerignore
 .gitignore
 .pre-commit-config.yaml
 Dockerfile
+**/__pycache__/
+.mypy_cache/*
 mypy.ini
 README.md
