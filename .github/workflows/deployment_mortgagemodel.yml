@@ -1,0 +1,51 @@
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+
+name: Build and deploy container app to Azure Web App - mortgagemodel
+
+on:
+  push:
+    branches:
+      - deployment
+      - dev
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: 'ubuntu-latest'
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+
+    - name: Log in to registry
+      uses: docker/login-action@v2
+      with:
+        registry: https://index.docker.io/v1/
+        username: ${{ secrets.AzureAppService_ContainerUsername_fe2bbc8a8ea743a980a156f654c694b7 }}
+        password: ${{ secrets.AzureAppService_ContainerPassword_1461d36acdb141d8bd7f0f287575d6c2 }}
+
+    - name: Build and push container image to registry
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        push: true
+        tags: eriklarkin/sweng28-model:latest
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: 'dev'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+
+    steps:
+    - name: Deploy to Azure Web App
+      id: deploy-to-webapp
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: 'mortgagemodel'
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_7533edd2efef43e98c6e34ee53264cfc }}
+        images: 'index.docker.io/eriklarkin/sweng28-model:latest'
