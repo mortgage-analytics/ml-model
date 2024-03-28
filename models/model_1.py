@@ -18,13 +18,13 @@ import torch.optim as optim
 # New Home=0, Existing Home=1
 
 class ANN(nn.Module):
-    def __init__(self, input_dim = 7, output_dim = 1):
+    def __init__(self, input_dim, output_dim):
         super(ANN, self).__init__()
         self.fc1 = nn.Linear(input_dim, 64)
         self.fc2 = nn.Linear(64, 64)
         self.fc3 = nn.Linear(64, 32)
         self.fc4 = nn.Linear(32, 32)
-        self.output_layer = nn.Linear(32,1)
+        self.output_layer = nn.Linear(32,output_dim)
         self.dropout = nn.Dropout(0.15)
 
     def forward(self, x):
@@ -46,7 +46,7 @@ if __name__ == "__main__":
     inputs = df[predictors].values
     output = df[target_column].values
 
-    input_train, input_test, output_train, output_test = train_test_split(X, y, test_size = 0.2, random_state = 30)
+    input_train, input_test, output_train, output_test = train_test_split(inputs, output, test_size = 0.2, random_state = 30)
     model = ANN(input_dim=6, output_dim=1)
 
     X_train = torch.from_numpy(input_train)
@@ -97,7 +97,7 @@ if __name__ == "__main__":
                 trainloss,
                 accuracy
             ))
-            epoch_list.append(epoch + 1)
+            # epoch_list.append(epoch + 1)
     
     
 # correct = 0
