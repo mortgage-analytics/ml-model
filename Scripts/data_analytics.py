@@ -72,7 +72,7 @@ def WhatBank(clients):
     FinanceIrelandCount = 0
     KBCCount = 0
     OtherCount = 0
-    PermanentTSBCOunt = 0
+    PermanentTSBCount = 0
     UlsterCount = 0
     for client in clients:
         if client.aip_lender_submitted_to == "ICS Mortgages":
@@ -90,15 +90,15 @@ def WhatBank(clients):
         elif client.aip_lender_submitted_to == "Ulster Bank":
             UlsterCount += 1
         elif client.aip_lender_submitted_to == "Permanent TSB":
-            UlsterCount += 1
+            PermanentTSBCount += 1
         else:
             OtherCount += 1
-    return ICSCount,HavenCount,BOICount,AvantCount,FinanceIrelandCount,KBCCount,OtherCount,PermanentTSBCOunt,UlsterCount
+    return ICSCount,HavenCount,BOICount,AvantCount,FinanceIrelandCount,KBCCount,OtherCount,PermanentTSBCount,UlsterCount
 
 def IncomeOfCompletedMortgages(clients):
     averages = []
-    lowest = float('inf')  # Use infinity as the initial lowest value
-    highest = 0  # Initialize highest as 0, assuming all incomes are positive
+    lowest = float('inf')  
+    highest = 0  
 
     for client in clients:
         if client.application_status == "Closed" and client.application_stage == "COMPLETE":
@@ -119,7 +119,7 @@ def IncomeOfCompletedMortgages(clients):
     return mean, std_dev, highest, lowest
 
 def _num_of_days2(date1, date2):
-    date_format = "%d/%m/%Y"  # Ensure the format matches your date strings
+    date_format = "%d/%m/%Y"  
     try:
         a = datetime.strptime(date1, date_format)
         b = datetime.strptime(date2, date_format)
@@ -134,15 +134,147 @@ def AverageTimeToCompletion(clients):
         offer_letter_received_date = client.application.offer_letter_received_date
         if lead_created_date and isinstance(offer_letter_received_date, str) and offer_letter_received_date.lower() != 'nan':
             duration = _num_of_days2(lead_created_date, offer_letter_received_date)
-            if duration is not None:  # Ensure duration is a valid number
+            if duration is not None:  
                 daysToCompletion.append(duration)
     valid_durations = [day for day in daysToCompletion if day is not None]
     if valid_durations:
-        mean = np.mean(valid_durations)  # Now you can directly use np.mean
+        mean = np.mean(valid_durations)  
         std_dev = np.std(valid_durations)
         return f"{mean:.2f}",f"{std_dev:.2f}"
     else:
         return 'No data'
+    
+def MortgageType(clients):
+    NewHomeCount = 0 
+    RemortgagingCount = 0
+    for client in clients:
+        if client.mortgage_type == "Purchasing a New Home":
+            NewHomeCount += 1
+        elif client.mortgage_type == "Remortgaging Existing Loan":
+            RemortgagingCount += 1
+    return NewHomeCount, RemortgagingCount
+
+def PropertyValue(clients):
+    values = []
+    for client in clients:
+        if client.property_value>0:
+            values.append(client.property_value)
+    mean = np.mean(values)
+    std_dev = np.std(values)
+    return mean, std_dev    
+
+def MortgageAmountProposed(clients):
+    values = []
+    for client in clients:
+        if client.mortgage_amount_proposed>0:
+            values.append(client.mortgage_amount_proposed)
+    mean = np.mean(values)
+    std_dev = np.std(values)
+    return mean, std_dev    
+
+def Applications(clients):
+    AppCount = 0
+    for client in clients:
+        if client.lead_status=="Application":
+            AppCount += 1
+    return AppCount, len(clients)-AppCount
+
+def InterestRateType(clients):
+    FixedCount = 0
+    VariableCount = 0
+    for client in clients:
+        if client.interest_rate_type == "Fixed":
+            FixedCount+=1
+        elif client.interest_rate_type == "Variable":
+            VariableCount+=1
+    return FixedCount, VariableCount
+
+
+def CurrentLender(clients):
+    AIBCount = 0
+    HavenCount = 0
+    BOICount = 0
+    EBSCount = 0
+    PepperCount = 0
+    KBCCount = 0
+    BlankCount = 0
+    PTSBCount = 0
+    UlsterCount = 0
+    for client in clients:
+        if client.aip_lender_submitted_to == "AIB":
+            AIBCount += 1
+        elif client.aip_lender_submitted_to == "Haven":
+            HavenCount += 1
+        elif client.aip_lender_submitted_to == "BOI":
+            BOICount += 1
+        elif client.aip_lender_submitted_to == "EBS":
+            EBSCount += 1
+        elif client.aip_lender_submitted_to == "Pepper":
+            PepperCount += 1
+        elif client.aip_lender_submitted_to == "KBC":
+            KBCCount += 1
+        elif client.aip_lender_submitted_to == "Ulster Bank":
+            UlsterCount += 1
+        elif client.aip_lender_submitted_to == "PTSB":
+            PTSBCount += 1
+        else:
+            BlankCount += 1
+    return AIBCount,HavenCount,BOICount,EBSCount,PepperCount,KBCCount,BlankCount,PTSBCount,UlsterCount
+
+def CurrentInterestRate(clients):
+    values = []
+    for client in clients:
+        if client.current_interest_rate>0:
+            values.append(client.current_interest_rate)
+    mean = np.mean(values)
+    std_dev = np.std(values)
+    return mean, std_dev  
+
+def CurrentMonthlyPayments(clients):
+    values = []
+    for client in clients:
+        if client.current_monthly_payment>0:
+            values.append(client.current_monthly_payment)
+    mean = np.mean(values)
+    std_dev = np.std(values)
+    return mean, std_dev  
+
+def ChosenLenderProvider(clients):
+    ICSCount = 0
+    HavenCount = 0
+    AvantCount = 0
+    BlankCount = 0
+    PermanentTSBCount = 0
+    MortgageStoreCount = 0
+    for client in clients:
+        if client.aip_lender_submitted_to == "ICS Mortgages":
+            ICSCount += 1
+        elif client.aip_lender_submitted_to == "Haven":
+            HavenCount += 1
+        elif client.aip_lender_submitted_to == "Mortgage Store":
+            MortgageStoreCount += 1
+        elif client.aip_lender_submitted_to == "Avant Money":
+            AvantCount += 1
+        elif client.aip_lender_submitted_to == "Permanent TSB":
+            PermanentTSBCount += 1
+        else:
+            BlankCount += 1
+    return ICSCount,HavenCount,AvantCount,MortgageStoreCount,PermanentTSBCount,BlankCount
+
+def GrossBasicIncome(clients):
+    values = []
+    for client in clients:
+        if client.lead_gross_basic_income>=25000:
+            values.append(client.lead_gross_basic_income)
+    mean = np.mean(values)
+    std_dev = np.std(values)
+    return mean, std_dev  
+
+
+
+
+
+
 # getStage:
 #   Takes in an array of type Application and the stage of the application
 #   we are looking for as a string. 

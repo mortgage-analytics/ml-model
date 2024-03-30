@@ -3,22 +3,18 @@ import numpy as np
 # from Client import Client
 
 class Timeline:
-    def __init__(self, lead_created_date, application_created_date, modified_date, aip_submission_date, 
-                 aip_response_received, aip_expiration, last_doc_upload, next_action_date, 
-                 advisor_review_completed_date, credit_submission_completed_date, recommendation_completed_date, 
+    def __init__(self, lead_created_date, application_created_date, aip_submission_date, 
+                 aip_response_received, last_doc_upload,advisor_review_completed_date, credit_submission_completed_date, recommendation_completed_date, 
                  pack_submitted_to_lender_date, offer_letter_received_date, loan_offer_completed_date, 
                  estimated_closing_date, closing_date, agreed_drawdown_date, funds_release_date, 
-                 fixed_rate_maturity_date, drawdown_completed_date, submitted_to_lender_date, loan_offer_expiry_date, 
+                 fixed_rate_maturity_date, drawdown_completed_date, submitted_to_lender_date, 
                  valuation_requested_date, valuation_received_date, signed_contracts_received_date, 
                  title_deeds_with_solicitor_date):
         self.lead_created_date = lead_created_date
         self.application_created_date = application_created_date
-        self.modified_date = modified_date
         self.aip_submission_date = aip_submission_date
         self.aip_response_received = aip_response_received
-        self.aip_expiration = aip_expiration
         self.last_doc_upload = last_doc_upload
-        self.next_action_date = next_action_date
         self.advisor_review_completed_date = advisor_review_completed_date
         self.credit_submission_completed_date = credit_submission_completed_date
         self.recommendation_completed_date = recommendation_completed_date
@@ -32,7 +28,6 @@ class Timeline:
         self.fixed_rate_maturity_date = fixed_rate_maturity_date
         self.drawdown_completed_date = drawdown_completed_date
         self.submitted_to_lender_date = submitted_to_lender_date
-        self.loan_offer_expiry_date = loan_offer_expiry_date
         self.valuation_requested_date = valuation_requested_date
         self.valuation_received_date = valuation_received_date
         self.signed_contracts_received_date = signed_contracts_received_date
