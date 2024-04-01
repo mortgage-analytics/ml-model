@@ -22,11 +22,11 @@ class Model:
 
         # theres probably a better way without for loop
         for i in range(len(data)):
-            index = data[i, -1]
+            index = int(data[i, -1])
             self.feature_means[index] = self.feature_means[index] + (data[i, :-1] / self.counts[index])
 
         for i in range(len(data)):
-            index = data[i, -1]
+            index = int(data[i, -1])
             self.feature_variances[index] = self.feature_variances[index] + (data[i, :-1] - self.feature_means[index])**2
 
         self.feature_variances = self.feature_variances / (np.reshape(np.repeat(self.counts, self.features), newshape=(self.classes, self.features))-1)
