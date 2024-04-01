@@ -1,6 +1,10 @@
 from typing import Tuple
 import pandas as pd
-import numpy as np 
+import numpy as np
+from math import pi, log
+
+def log_prob(x, mean, variance):
+    return -0.5 * ((x-mean)**2)/variance * log(2 * pi * variance)
 
 class Model:
     def __init__(self, features:int, classes:int):
@@ -20,7 +24,7 @@ class Model:
 
         self.probabilities = self.counts / len(data)
 
-        # theres probably a better way without for loop
+        #TODO: theres probably a better way without for loop
         for i in range(len(data)):
             index = int(data[i, -1])
             self.feature_means[index] = self.feature_means[index] + (data[i, :-1] / self.counts[index])
@@ -36,7 +40,19 @@ class Model:
         """
         Gives a prediction given the data, with a probability
         """
-        return (0, 0)
+        assert self.features == len(data), "Number of features of model does not match input data"
+        output = (0, float("-inf"))
+
+        #TODO: there is definitly a better way to do this
+        for i in range(self.classes):
+            prob = 0
+            for j in range(self.features):
+                prob += log_prob(data[j], self.feature_means[i][j], self.feature_variances[i][j])
+
+            if (output[1] < prob):
+                output = (i, prob)
+
+        return output
 
 
     def export_model(self, file_name:str):
@@ -53,17 +69,11 @@ class Model:
 
 
 if __name__ == "__main__":
-    # df = pd.read_csv('training_data.csv')
-    # target_column = ['application_stage']
+    data = np.genfromtxt('training_data.csv', delimiter=',', skip_header=1)
 
-    # predictors = list(set(list(df.columns))-set(target_column))     # not include those two columnjjhs
-
-    # inputs = df[predictors].values
-    # output = df[target_column].values
-
-    # input_train, input_test, output_train, output_test = train_test_split(inputs, output, test_size = 0.2, random_state = 30)
-    #
-
-    data = np.random.randint(0, 2, (10, 7))
     model = Model(features=6, classes=2)
     model.train(data)
+
+    example = data[4]
+    print(data[4])
+    print(model.classify(example[:-1]))
