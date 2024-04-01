@@ -2,7 +2,8 @@
 
 class Client:
     def __init__(self, aip_lender_submitted_to, property_value, mortgage_amount_proposed,
-                 application_type, mortgage_type,application_stage,application_status,documents_uploaded,
+                 application_type, mortgage_type,application_stage,application_status,documents_uploaded, primary_document_upload_percent,
+                 secondary_document_upload, secondary_document_upload_percent,
                  sum_of_income,current_interest_rate,current_monthly_payment,lead_gross_basic_income,lead_status,interest_rate_type,application):
         self.aip_lender_submitted_to = aip_lender_submitted_to
         self.property_value = property_value
@@ -13,6 +14,9 @@ class Client:
         self.application_stage = application_stage
         self.application_status = application_status
         self.documents_uploaded = documents_uploaded
+        self.primary_documents_percentage = primary_document_upload_percent
+        self.secondary_documents_upload = secondary_document_upload
+        self.secondary_documents_percentage = secondary_document_upload_percent
         self.sum_of_income = sum_of_income
         self.current_interest_rate = current_interest_rate
         self.current_monthly_payment = current_monthly_payment

@@ -1,5 +1,5 @@
 import numpy as np
-from Timeline import Timeline
+from Scripts.Timeline import Timeline
 from datetime import datetime
 
 # from Scripts.Timeline import calculate_differences
@@ -157,7 +157,7 @@ def MortgageType(clients):
 def PropertyValue(clients):
     values = []
     for client in clients:
-        if client.property_value>0:
+        if client.property_value > 10000 and client.property_value < 30000000:
             values.append(client.property_value)
     mean = np.mean(values)
     std_dev = np.std(values)
@@ -166,7 +166,7 @@ def PropertyValue(clients):
 def MortgageAmountProposed(clients):
     values = []
     for client in clients:
-        if client.mortgage_amount_proposed>0:
+        if client.mortgage_amount_proposed > 10000 and client.mortgage_amount_proposed < client.property_value:
             values.append(client.mortgage_amount_proposed)
     mean = np.mean(values)
     std_dev = np.std(values)
@@ -270,10 +270,25 @@ def GrossBasicIncome(clients):
     std_dev = np.std(values)
     return mean, std_dev  
 
+def documentationUploaded(clients):
+    values = []
+    for client in clients:
+        if client.documents_uploaded:
+            if client.primary_documents_percentage is not None:
+                values.append(client.primary_documents_percentage)
+    mean = np.mean(values)
+    std_dev = np.std(values)
+    return mean, std_dev
 
-
-
-
+def secondaryDocumentationUploaded(clients):
+    values = []
+    for client in clients:
+        if client.secondary_documents_upload:
+            if not np.isnan(client.secondary_documents_percentage):
+                values.append(client.primary_documents_percentage)
+    mean = np.mean(values)
+    std_dev = np.std(values)
+    return mean, std_dev
 
 # getStage:
 #   Takes in an array of type Application and the stage of the application
