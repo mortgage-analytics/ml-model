@@ -1,10 +1,10 @@
-from typing import Tuple
+from typing import Tuple, List
 import pandas as pd
 import numpy as np
-from math import pi, log
+from math import pi, log, floor
 
 def log_prob(x, mean, variance):
-    return -0.5 * ((x-mean)**2)/variance * log(2 * pi * variance)
+    return -0.5 * (((x-mean)**2)/variance + log(2 * pi * variance))
 
 class Model:
     def __init__(self, features:int, classes:int):
@@ -45,23 +45,25 @@ class Model:
 
         #TODO: there is definitly a better way to do this
         for i in range(self.classes):
-            prob = 0
+            prob = log(self.probabilities[i])
             for j in range(self.features):
                 prob += log_prob(data[j], self.feature_means[i][j], self.feature_variances[i][j])
 
-            if (output[1] < prob):
+            if (prob > output[0]):
                 output = (i, prob)
 
         return output
 
 
-    def export_model(self, file_name:str):
+    @staticmethod
+    def export_model(file_name:str):
         """
         Exports feature means and variances in a file
         """
         pass
 
-    def load_model(self, file_name:str):
+    @staticmethod
+    def load_model(file_name:str):
         """
         Imports feature means and variances in a file
         """
