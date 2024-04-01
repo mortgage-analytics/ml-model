@@ -49,21 +49,20 @@ class Model:
             for j in range(self.features):
                 prob += log_prob(data[j], self.feature_means[i][j], self.feature_variances[i][j])
 
-            if (prob > output[0]):
+            if (prob > output[1]):
                 output = (i, prob)
 
         return output
 
 
-    @staticmethod
-    def export_model(file_name:str):
+    def export_model(self, file_name:str):
         """
         Exports feature means and variances in a file
         """
         pass
 
     @staticmethod
-    def load_model(file_name:str):
+    def load_model(file_name:str) -> Model:
         """
         Imports feature means and variances in a file
         """
@@ -86,13 +85,17 @@ if __name__ == "__main__":
 
     count = 0
     vals: List[int] = [0, 0]
+    actual_vals: List[int] = [0, 0]
     for i in range(len(testing_data)):
-        expected = data[i, -1]
+        expected = int(data[i, -1])
         actual = model.classify(testing_data[i,:-1])[0]
         vals[actual] += 1
+        actual_vals[expected] += 1
+        #print(actual, expected)
         if (actual == expected):
             count += 1
-    accuracy = count/len(data)
+    accuracy = count/len(testing_data)
 
-    print(vals)
+    print("Guesses:",vals)
+    print("Actual:",actual_vals)
     print(f"Accuracy: {accuracy*100:.2f}%")
