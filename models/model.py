@@ -71,11 +71,28 @@ class Model:
 
 
 if __name__ == "__main__":
+    print("Loading data...")
     data = np.genfromtxt('training_data.csv', delimiter=',', skip_header=1)
+    training_size = floor(len(data) * .8)
+
+    np.random.shuffle(data)
+
+    training_data = data[:training_size]
+    testing_data = data[training_size:]
 
     model = Model(features=6, classes=2)
-    model.train(data)
+    print("Training model...")
+    model.train(training_data)
 
-    example = data[4]
-    print(data[4])
-    print(model.classify(example[:-1]))
+    count = 0
+    vals: List[int] = [0, 0]
+    for i in range(len(testing_data)):
+        expected = data[i, -1]
+        actual = model.classify(testing_data[i,:-1])[0]
+        vals[actual] += 1
+        if (actual == expected):
+            count += 1
+    accuracy = count/len(data)
+
+    print(vals)
+    print(f"Accuracy: {accuracy*100:.2f}%")
