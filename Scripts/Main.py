@@ -22,7 +22,7 @@ def data_analysis():
     current_directory = os.getcwd()
 
     # Construct the file path to the CSV file
-    file_path = os.path.join(current_directory, "Data Analytics.csv")
+    file_path = os.path.join(current_directory, "data_analytics.csv")
     df = pd.read_csv(file_path)
 
    

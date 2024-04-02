@@ -1,6 +1,7 @@
 import sys
 from pathlib import Path
 from fastapi import FastAPI
+from model import Model
 
 parent_dir = str(Path(__file__).resolve().parent.parent)
 sys.path.append(parent_dir)
@@ -8,6 +9,8 @@ sys.path.append(parent_dir)
 from Scripts.Main import data_analysis
 
 app = FastAPI()
+
+model = Model.load_model("file_name")
 
 @app.get("/test")
 def test():
