@@ -38,11 +38,12 @@ class Model:
         Gives a prediction given the data, with a probability
         """
         assert self.features == len(data), "Number of features of model does not match input data"
-        output = (0, float("-inf"))
+        output = (-1, float("-inf"))
 
         #TODO: there is definitly a better way to do this
         for i in range(self.classes):
-            prob = self.probabilities[i]
+            #prob = self.probabilities[i]
+            prob = 1
             for j in range(self.features):
                 prob *= gauss_prob(data[j], self.feature_means[i][j], self.feature_variances[i][j])
 
@@ -58,13 +59,12 @@ class Model:
         """
         print(f"Exporting model to {file_name}")
 
-    @staticmethod
-    def load(file_name:str):
-        """
-        Imports feature means and variances in a file
-        """
-        pass
 
+def load(file_name:str) -> Model:
+    """
+       Imports feature means and variances in a file
+       """
+    pass
 
 if __name__ == "__main__":
     print("Loading data...")
