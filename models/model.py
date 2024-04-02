@@ -2,6 +2,7 @@ from typing import Tuple, List
 import numpy as np
 from math import log, floor
 from helpers import *
+import os
 
 class Model:
     def __init__(self, features:int, classes:int):
@@ -38,6 +39,7 @@ class Model:
 
         #self.feature_variances = self.feature_variances /
         print(self.feature_means)
+        
 
     def classify(self, data:np.ndarray) -> Tuple[int, float]:
         """
@@ -62,14 +64,29 @@ class Model:
         """
         Exports feature means and variances in a file
         """
+        with open(file_name, 'w') as file:
+            file.write(f"{self.classes},{self.features}\n")
+            np.savetxt(file, self.feature_means, delimiter=',', fmt='%s')
+            np.savetxt(file, self.feature_variances, delimiter=',', fmt='%s')
         print(f"Exporting model to {file_name}")
 
+    @classmethod
+    def load(cls, file_name: str) -> 'Model':
+        """
+        Imports feature means and variances from a file.
+        """
+        with open(file_name, 'r') as file:
+            next(file)
+            all_values = [float(value) for line in file for value in line.split(',')]
 
-def load(file_name:str) -> Model:
-    """
-       Imports feature means and variances in a file
-    """
-    pass
+        mid = len(all_values) // 2
+        feature_means_values = all_values[:mid]
+        feature_variances_values = all_values[mid:]
+        feature_means = np.array(feature_means_values).reshape(2, 6)
+        feature_variances = np.array(feature_variances_values).reshape(2, 6)
+
+        return feature_means, feature_variances
+    
 
 if __name__ == "__main__":
     print("Loading data...")
@@ -80,8 +97,9 @@ if __name__ == "__main__":
     training_data = data[:training_size]
     testing_data = data[training_size:]
 
-    model = Model(features=5, classes=2)
+    model = Model(features=6, classes=2)
     print("Training model...")
+    
     model.train(training_data)
 
     count = 0
