@@ -4,6 +4,7 @@ from Scripts.Client import Client
 from .data_analytics import WhatType, IncomeOfCompletedMortgages, WhatBank, CurrentLender, ChosenLenderProvider, MortgageType, PropertyValue, CurrentInterestRate, CurrentMonthlyPayments, GrossBasicIncome, MortgageAmountProposed, Applications
 from .data_analytics import InterestRateType, AverageTimeToCompletion, SingleOrJoint, documentationUploaded, secondaryDocumentationUploaded
 import numpy as np
+import os
 
 
 stagesNames = ["lead_to_application","application_to_aip_submission","aip_submission_to_response",
@@ -16,7 +17,12 @@ stagesNames = ["lead_to_application","application_to_aip_submission","aip_submis
 
 
 def data_analysis():
-    file_path = r"C:\Users\manue\Downloads\Data Analytics.csv"
+
+    # Get the current working directory
+    current_directory = os.getcwd()
+
+    # Construct the file path to the CSV file
+    file_path = os.path.join(current_directory, "Data Analytics.csv")
     df = pd.read_csv(file_path)
 
    
