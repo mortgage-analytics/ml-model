@@ -1,6 +1,6 @@
 from typing import Tuple, List
 import numpy as np
-from math import pi, log, floor
+from math import log, floor
 from helpers import *
 
 class Model:
@@ -42,9 +42,9 @@ class Model:
 
         #TODO: there is definitly a better way to do this
         for i in range(self.classes):
-            prob = log(self.probabilities[i])
+            prob = self.probabilities[i]
             for j in range(self.features):
-                prob += log_prob(data[j], self.feature_means[i][j], self.feature_variances[i][j])
+                prob *= gauss_prob(data[j], self.feature_means[i][j], self.feature_variances[i][j])
 
             if (prob > output[1]):
                 output = (i, prob)
@@ -96,5 +96,5 @@ if __name__ == "__main__":
     print("Actual:",actual_vals)
     print(f"Accuracy: {accuracy*100:.2f}%")
 
-    if getenv("EXPORT"):
+    if getenv("EXPORT") == 1:
         model.save("model_file")
