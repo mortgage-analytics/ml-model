@@ -1,10 +1,7 @@
 from typing import Tuple, List
-import pandas as pd
 import numpy as np
 from math import pi, log, floor
-
-def log_prob(x, mean, variance):
-    return -0.5 * (((x-mean)**2)/variance + log(2 * pi * variance))
+from helpers import *
 
 class Model:
     def __init__(self, features:int, classes:int):
@@ -55,14 +52,14 @@ class Model:
         return output
 
 
-    def export_model(self, file_name:str):
+    def save(self, file_name:str):
         """
         Exports feature means and variances in a file
         """
-        pass
+        print(f"Exporting model to {file_name}")
 
     @staticmethod
-    def load_model(file_name:str) -> Model:
+    def load(file_name:str):
         """
         Imports feature means and variances in a file
         """
@@ -75,7 +72,6 @@ if __name__ == "__main__":
     training_size = floor(len(data) * .8)
 
     np.random.shuffle(data)
-
     training_data = data[:training_size]
     testing_data = data[training_size:]
 
@@ -99,3 +95,6 @@ if __name__ == "__main__":
     print("Guesses:",vals)
     print("Actual:",actual_vals)
     print(f"Accuracy: {accuracy*100:.2f}%")
+
+    if getenv("EXPORT"):
+        model.save("model_file")
