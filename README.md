@@ -43,11 +43,12 @@ pre-commit install
 
 # Usage
 
-In order to save a model, use
+In order to save/load a model, use
 
 ``` sh
 cd models
-EXPORT=1 python model.py
+SAVE=1 python xgboost_model.py
+LOAD=1 python xgboost_model.py
 ```
 
 If the env var EXPORT is anything else it will just train a model, and print an accuracy. This will save a model into a text file, which can then be loaded whenever you want.
