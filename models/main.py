@@ -1,4 +1,5 @@
 import sys
+import numpy as np
 from pathlib import Path
 from fastapi import FastAPI
 from xgboost_model import Model as XGBoostModel
@@ -20,15 +21,17 @@ class ModelData(BaseModel):
     property_value: float
     mortgage_amount_proposed: float
     summed_income: float
-    application_stage: int
 
     def to_np(self):
         return np.array([self.application_type,
                          self.mortgage_type,
                          self.property_value,
                          self.mortgage_amount_proposed,
-                         self.summed_income,
-                         self.application_stage])
+                         self.summed_income])
+
+@app.get("/")
+def home():
+    return
 
 @app.get("/data_analytics")
 def get_analytics_result1():
@@ -36,6 +39,6 @@ def get_analytics_result1():
     print(result)
     return result
 
-@app.get("/model")
+@app.post("/model")
 def predict_successful_mortgage(data:ModelData):
     return model.infer(data.to_np())

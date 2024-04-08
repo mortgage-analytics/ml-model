@@ -28,7 +28,7 @@ class Model:
         return count / len(data)
 
     def infer(self, data:np.ndarray):
-        return round(self._model.predict(data))
+        return round(self._model.predict([data])[0])
 
     def save(self, file_name:str):
         self._model.save_model(file_name)
@@ -39,6 +39,7 @@ class Model:
 
 
 if __name__ == "__main__":
+    #1, 631
     weights_file_name = "xgboost_model_weights"
     dataset = np.genfromtxt('training_data.csv', delimiter=',', skip_header=1)
     np.random.shuffle(dataset)
