@@ -2,10 +2,13 @@ name: model
 channels:
   - defaults
 dependencies:
-  - nomkl # reduces Docker image size by approx 700 MB
   - fastapi
+  - nomkl
+  - pandas
   - python=3.10
   - uvicorn
-  - pandas
-  - pytorch
-prefix: C:\Users\rober\miniconda3\envs\model
+  - xgboost
+  - ca-certificates
+  - certifi
+  - openssl
+prefix: /home/andrew/miniconda3/envs/model
