@@ -21,8 +21,6 @@ class Model:
         assert self.classes_array[-1] == self.classes-1, "Number of classes in dataset is wrong"
 
         self.probabilities = self.counts / len(data)
-
-        #TODO: theres probably a better way without for loop
         for i in range(len(data)):
             index = int(data[i, -1])
             self.feature_means[index] = self.feature_means[index] + (data[i, :-1] / self.counts[index])
@@ -32,16 +30,10 @@ class Model:
             self.feature_variances[index] = self.feature_variances[index] + (data[i, :-1] - self.feature_means[index])**2
 
         self.feature_variances = self.feature_variances / (np.reshape(np.repeat(self.counts, self.features), newshape=(self.classes, self.features))-1)
-
-        #for i in range(self.features):
-        #    self.feature_variances[0][i] = self.feature_variances[0][i] / self.probabilities[0]
-        #    self.feature_variances[1][i] = self.feature_variances[1][i] / self.probabilities[1]
-
-        #self.feature_variances = self.feature_variances /
         print(self.feature_means)
         
 
-    def classify(self, data:np.ndarray) -> Tuple[int, float]:
+    def evaluate(self, data:np.ndarray) -> Tuple[int, float]:
         """
         Gives a prediction given the data, with a probability
         """
@@ -71,7 +63,7 @@ class Model:
         print(f"Exporting model to {file_name}")
 
     @classmethod
-    def load(cls, file_name: str) -> 'Model':
+    def load(cls, file_name: str):
         """
         Imports feature means and variances from a file.
         """
@@ -89,6 +81,7 @@ class Model:
     
 
 if __name__ == "__main__":
+    weights_file_name = "naive_bayes_weights"
     print("Loading data...")
     data = np.genfromtxt('training_data.csv', delimiter=',', skip_header=1)
     training_size = floor(len(data) * .8)
@@ -98,30 +91,27 @@ if __name__ == "__main__":
     testing_data = data[training_size:]
 
     model = Model(features=6, classes=2)
-    print("Training model...")
-    
-    model.train(training_data)
+
+    if getenv("LOAD")==1:
+        print("Loading model...")
+        model.load(weights_file_name)
+    else:
+        print("Training model...")
+        model.train(training_data)
 
     count = 0
     vals: List[int] = [0, 0]
     actual_vals: List[int] = [0, 0]
     for i in range(len(testing_data)):
         expected = int(data[i, -1])
-        actual = model.classify(testing_data[i,:-1])[0]
+        actual = model.evaluate(testing_data[i,:-1])[0]
         vals[actual] += 1
         actual_vals[expected] += 1
         if (actual == expected):
             count += 1
     accuracy = count/len(testing_data)
 
-    #print("Guesses:",vals)
-    #print("Actual:",actual_vals)
-    #print(f"Accuracy: {accuracy*100:.2f}%")
+    print(f"Accuracy: {accuracy*100:.2f}%")
 
-    #point = np.array([1, 0, 380000, 340000, 1])
-    #point = np.array([1, 0, 595000, 514000, 1])#should be a 1
-    #g = model.classify(point)
-    #print(g, 1)
-
-    if getenv("EXPORT") == 1:
-        model.save("model_file")
+    if getenv("SAVE") == 1:
+        model.save(weights_file_name)
