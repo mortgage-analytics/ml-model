@@ -71,7 +71,7 @@ class Model:
         print(f"Exporting model to {file_name}")
 
     @classmethod
-    def load(cls, file_name: str) -> 'Model':
+    def load(cls, file_name: str):
         """
         Imports feature means and variances from a file.
         """
