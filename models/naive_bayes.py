@@ -39,7 +39,7 @@ class Model:
         #self.feature_variances = self.feature_variances /
         print(self.feature_means)
 
-    def classify(self, data:np.ndarray) -> Tuple[int, float]:
+    def evaluate(self, data:np.ndarray) -> Tuple[int, float]:
         """
         Gives a prediction given the data, with a probability
         """
@@ -89,20 +89,20 @@ if __name__ == "__main__":
     actual_vals: List[int] = [0, 0]
     for i in range(len(testing_data)):
         expected = int(data[i, -1])
-        actual = model.classify(testing_data[i,:-1])[0]
+        actual = model.evaluate(testing_data[i,:-1])[0]
         vals[actual] += 1
         actual_vals[expected] += 1
         if (actual == expected):
             count += 1
-    accuracy = count/len(testing_data)
+    accuracy = 1-count/len(testing_data)
 
     #print("Guesses:",vals)
     #print("Actual:",actual_vals)
-    #print(f"Accuracy: {accuracy*100:.2f}%")
+    print(f"Accuracy: {accuracy*100:.2f}%")
 
     #point = np.array([1, 0, 380000, 340000, 1])
     #point = np.array([1, 0, 595000, 514000, 1])#should be a 1
-    #g = model.classify(point)
+    #g = model.evaluate(point)
     #print(g, 1)
 
     if getenv("EXPORT") == 1:
