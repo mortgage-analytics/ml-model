@@ -1,0 +1,14 @@
+name: model
+channels:
+  - defaults
+dependencies:
+  - fastapi
+  - nomkl
+  - pandas
+  - python=3.10
+  - uvicorn
+  - xgboost
+  - ca-certificates
+  - certifi
+  - openssl
+prefix: /home/andrew/miniconda3/envs/model
